@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product List with Discounts</title>
+    <style>
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        .discount-banner {
+            background-color: #ffeb3b;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .original-price {
+            text-decoration: line-through;
+            color: #666;
+        }
+        .discounted-price {
+            color: #e53935;
+            font-weight: bold;
+        }
+        .products {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Products with Category-Based Discounts</h1>
+    
+    {% if user_category != 'Low' and discount_percentage > 0 %}
+    <div class="discount-banner">
+        <h2>Your Discount: {{ "%.1f"|format(discount_percentage) }}%</h2>
+    </div>
+    {% endif %}
+    
+    <div class="products">
+        {% if products %}
+            {% for product in products %}
+            <div class="product-card">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                {% if user_category == 'Low' %}
+                    <p>Price: ${{ "%.2f"|format(product.original_price) }}</p>
+                {% else %}
+                    <p class="original-price">Original Price: ${{ "%.2f"|format(product.original_price) }}</p>
+                    <p class="discounted-price">Your Price: ${{ "%.2f"|format(product.discounted_price) }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No products available at this time.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
